@@ -11,6 +11,26 @@
     <div class="container">
         <h1>Database Table Manager</h1>
 
+        <h3 class="mt-4">Create New Table</h3>
+        <form action="{{ url_for('create_table') }}" method="POST">
+            <div class="mb-3">
+                <label for="new_table_name" class="form-label">Table Name</label>
+                <input type="text" class="form-control" id="new_table_name" name="new_table_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="columns" class="form-label">Columns (SQL format)</label>
+                <input type="text" class="form-control" id="columns" name="columns" required placeholder="id INTEGER PRIMARY KEY, name TEXT">
+            </div>
+            <button type="submit" class="btn btn-success">Create Table</button>
+        </form>
+
+        <div class="mt-4">
+            <h6>Example Format:</h6>
+            <code>id INTEGER PRIMARY KEY, name TEXT, amount REAL</code>
+        </div>
+
+        <hr>
+
         <h3 class="mt-4">Drop Specific Table</h3>
         <form method="POST" onsubmit="return confirm('Drop selected table?');">
             <div class="input-group mt-2 mb-3">
