@@ -5,12 +5,13 @@ from sqlalchemy import inspect, text
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')  # Render sets this
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-#app.config['SECRET_KEY'] = 'your-secret-key'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///utang.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')  # Render sets this
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #db = SQLAlchemy(app)
+app.config['SECRET_KEY'] = '5f3fba401aebfa99c3b6794dc22d7d5111ae21d194712b5e67a6ab89f1bc4fd8'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')  # Render sets this
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///utang.db'
+db = SQLAlchemy(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
