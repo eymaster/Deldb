@@ -13,8 +13,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')  # Render
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///utang.db'
 db = SQLAlchemy(app)
 
+# Model
+class Person(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    people = Person.query.all()
     inspector = inspect(db.engine)
     tables = inspector.get_table_names()
 
@@ -29,7 +36,7 @@ def index():
                 flash(str(e), 'warning')
         return redirect(url_for('index'))
 
-    return render_template('index.html', tables=tables)
+    return render_template('index.html', tables=tables, people=people)
 
 @app.route('/drop-all-tables', methods=['POST'])
 def drop_all_tables():
@@ -56,5 +63,27 @@ def create_table():
 
     return redirect(url_for('index'))
 
+
+# Add name
+@app.route('/add', methods=['POST'])
+def add_person():
+    name = request.form.get('name')
+    if name:
+        new_person = Person(name=name)
+        db.session.add(new_person)
+        db.session.commit()
+    return redirect(url_for('index'))
+
+# Delete name
+@app.route('/delete/<int:id>')
+def delete_person(id):
+    person = Person.query.get_or_404(id)
+    db.session.delete(person)
+    db.session.commit()
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
+
